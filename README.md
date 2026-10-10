@@ -40,7 +40,7 @@ Trivial edits (typos, formatting, version bumps, one-line config) are skipped.
 **Option A: as a plugin**
 
 ```
-/plugin marketplace add YOUR-GITHUB-USER/edirae-learn
+/plugin marketplace add eloquentcoder/edirae-learn
 /plugin install edirae-learn@edirae
 ```
 
@@ -48,7 +48,7 @@ Trivial edits (typos, formatting, version bumps, one-line config) are skipped.
 
 ```bash
 # For you, in every project
-git clone https://github.com/YOUR-GITHUB-USER/edirae-learn.git
+git clone https://github.com/eloquentcoder/edirae-learn.git
 mkdir -p ~/.claude/skills && cp -R edirae-learn/skills/edirae-learn ~/.claude/skills/
 
 # Or for one project only (commit it so your team gets it too)
@@ -60,7 +60,7 @@ mkdir -p .claude/skills && cp -R edirae-learn/skills/edirae-learn .claude/skills
 From inside your project folder:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR-GITHUB-USER/edirae-learn/main/install.sh | EDIRAE_LEARN_REPO=YOUR-GITHUB-USER/edirae-learn bash -s -- --all
+curl -fsSL https://raw.githubusercontent.com/eloquentcoder/edirae-learn/main/install.sh | EDIRAE_LEARN_REPO=eloquentcoder/edirae-learn bash -s -- --all
 ```
 
 Or, from a clone:
