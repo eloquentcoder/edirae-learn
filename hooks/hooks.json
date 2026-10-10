@@ -1,0 +1,16 @@
+{
+  "description": "Edirae Learn: ask Claude for a breakdown when it changed code but did not write one",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v node >/dev/null 2>&1 && node \"${CLAUDE_PLUGIN_ROOT}/hooks/learn-stop.mjs\" || true",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -44,7 +44,13 @@ Trivial edits (typos, formatting, version bumps, one-line config) are skipped.
 /plugin install edirae-learn@edirae
 ```
 
+This is the recommended way. Besides the skill, the plugin ships a Stop hook: when Claude is about to finish a turn in which it changed code but didn't save a breakdown, the hook asks it to write one (or to finish normally if the change was trivial). A skill on its own only runs when Claude thinks to use it, so without the hook breakdowns get skipped. The hook needs `node` on your PATH; without it, the hook does nothing.
+
+The hook only sees files changed with Claude's edit tools (not shell commands or subagents), ignores docs and edits under 5 lines, and respects "skip learn", "turn off Edirae Learn" and `edirae.config.json`. Its tests run with `node --test tests/learn-stop.test.mjs`.
+
 **Option B: copy the skill**
+
+A copied skill doesn't include the Stop hook, so Claude may not always remember to write breakdowns.
 
 ```bash
 # For you, in every project
