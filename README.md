@@ -60,7 +60,7 @@ mkdir -p .claude/skills && cp -R edirae-learn/skills/edirae-learn .claude/skills
 From inside your project folder:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/eloquentcoder/edirae-learn/main/install.sh | EDIRAE_LEARN_REPO=eloquentcoder/edirae-learn bash -s -- --all
+curl -fsSL https://raw.githubusercontent.com/eloquentcoder/edirae-learn/master/install.sh | EDIRAE_LEARN_REPO=eloquentcoder/edirae-learn bash -s -- --all
 ```
 
 Or, from a clone:
