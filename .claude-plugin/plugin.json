@@ -1,0 +1,12 @@
+{
+  "name": "edirae-learn",
+  "version": "0.1.0",
+  "description": "Every time your coding agent writes code, get a 2-minute breakdown of what it built, why, and a few questions to check you understand it.",
+  "author": {
+    "name": "Edirae",
+    "url": "https://edirae.com"
+  },
+  "homepage": "https://edirae.com",
+  "license": "MIT",
+  "keywords": ["learning", "documentation", "code-understanding", "education"]
+}

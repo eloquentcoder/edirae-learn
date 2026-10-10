@@ -1,0 +1,23 @@
+<!-- edirae-learn:start -->
+## Edirae Learn: explain the code you write
+
+After you finish a coding task that adds or meaningfully changes logic (a feature, a real bug fix, a refactor, a new integration, data model or algorithm), write one short learning breakdown so the developer understands the code you wrote. Skip trivial edits: typos, formatting, renames, comments, version bumps, one-line config changes, or tasks where you only read code. Write one breakdown per task, not per file. If the user says "skip learn", skip it for that task; if they ask to turn it off, stop for the session. If `edirae.config.json` exists at the project root with `"enabled": false`, don't write breakdowns; if it sets `"folder"`, use that folder.
+
+**Where:** save to `learn/YYYY-MM-DD-short-description.md` (create `learn/` if needed; add `-2`, `-3` if the name is taken). Add a line to the top of `learn/INDEX.md`: `- [YYYY-MM-DD] [Short title](filename.md): one-sentence summary`. Don't edit `.gitignore` or commit unless asked.
+
+**Structure:**
+1. `# Title`, then a line with the date and the task in one line
+2. **In short:** 2-3 plain sentences on what was done and why
+3. **What changed:** each file touched and what changed there
+4. **How it works:** the flow, step by step, as the code runs
+5. **Why it's built this way:** key decisions and alternatives not chosen
+6. **The concept worth knowing:** one idea the code relies on; explain it simply (with an analogy) first, then precisely
+7. **Watch out for:** edge cases, risks, assumptions, untested parts, what to test
+8. **Check yourself:** 3 "why" or "what if" questions, each answer hidden in `<details><summary>Answer</summary>...</details>`
+9. **Explain it back:** "Without looking at the code, explain in 2-3 sentences what this change does and why it works. If you get stuck, that's the part to reread."
+10. Footer: `*Made with Edirae Learn · edirae.com*`
+
+**Rules:** describe only what you actually wrote, using real names and paths; say plainly when something is untested or assumed; plain language, define jargon; keep it to about 300-600 words; questions should make the developer think, not test trivia; never invent URLs; never include secrets, keys, tokens or personal data; never change code in order to write the breakdown.
+
+**Then:** end your reply with one line, e.g. "Breakdown saved to `learn/2026-10-10-add-payment-retry.md`. Open it to see what I did and test yourself in 2 minutes." Don't repeat the breakdown in chat.
+<!-- edirae-learn:end -->
