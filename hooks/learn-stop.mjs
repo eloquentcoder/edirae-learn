@@ -3,7 +3,8 @@
 //
 // Runs when Claude is about to end its turn. If Claude changed code in the
 // project during this turn but did not save a breakdown in the learn folder,
-// it blocks the stop and asks Claude to write one. Everything else (no code
+// it blocks the stop and asks Claude to write one. When a breakdown was saved
+// in the turn, it shows the developer where. Everything else (no code
 // changes, docs-only or tiny edits, "skip learn", a disabled config, any
 // error) lets Claude stop normally. It never fails the session.
 
@@ -82,12 +83,12 @@ function loadConfig(projectDir) {
 const isInside = (rel) => rel !== "" && !rel.startsWith("..") && !isAbsolute(rel);
 
 /**
- * Decide whether to block Claude from stopping.
- * Returns { decision: "block", reason } or null to allow the stop.
+ * Decide what happens when Claude stops.
+ * Returns { decision: "block", reason } to ask for a breakdown,
+ * { systemMessage } to tell the developer a breakdown was saved,
+ * or null to let Claude stop silently.
  */
 export function decide({ input, entries, projectDir, today }) {
-  if (input?.stop_hook_active) return null;
-
   const config = loadConfig(projectDir);
   if (config.enabled === false) return null;
   const folder = String(config.folder || "learn").replace(/^\/+|\/+$/g, "");
@@ -104,10 +105,10 @@ export function decide({ input, entries, projectDir, today }) {
     lastHumanPrompt = text;
   }
   if (turnStart === -1) return null;
-  if (SKIP_PATTERN.test(lastHumanPrompt)) return null;
 
   let codeLines = 0;
   const codeFiles = new Set();
+  const breakdowns = new Set();
   for (const entry of entries.slice(turnStart + 1)) {
     for (const use of toolUses(entry)) {
       if (!EDIT_TOOLS.has(use.name)) continue;
@@ -119,7 +120,7 @@ export function decide({ input, entries, projectDir, today }) {
       const inLearn = relative(learnDir, abs);
       if (isInside(inLearn)) {
         const isBreakdown = extname(abs) === ".md" && inLearn !== "INDEX.md";
-        if (isBreakdown) return null;
+        if (isBreakdown) breakdowns.add(`${folder}/${inLearn.split(sep).join("/")}`);
         continue;
       }
 
@@ -133,13 +134,25 @@ export function decide({ input, entries, projectDir, today }) {
     }
   }
 
+  if (breakdowns.size) {
+    const saved = [...breakdowns].join(", ");
+    return {
+      systemMessage:
+        `Edirae Learn: breakdown saved to ${saved}. ` +
+        `Open it to see what was built and test yourself in 2 minutes.`,
+    };
+  }
+
+  if (input?.stop_hook_active) return null;
+  if (SKIP_PATTERN.test(lastHumanPrompt)) return null;
   if (codeLines < MIN_LINES) return null;
 
+  // Keep this wording clear of SKIP_PATTERN: Claude Code may log it as a prompt.
   const files = [...codeFiles].slice(0, 8).join(", ") + (codeFiles.size > 8 ? ", ..." : "");
   return {
     decision: "block",
     reason:
-      `Edirae Learn: you changed code in this task (${files}) but no breakdown was saved in ${folder}/. ` +
+      `Edirae Learn: you changed code in this task (${files}) but did not save a breakdown in ${folder}/. ` +
       `If this was a meaningful change, use the edirae-learn skill now: write ${folder}/${today}-short-description.md ` +
       `and add its line to the top of ${folder}/INDEX.md, then end with the one-line "Breakdown saved to ..." note. ` +
       `If the change was trivial (typo, rename, formatting, one-line config) or the task is not finished yet, ` +

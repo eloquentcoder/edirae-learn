@@ -50,7 +50,7 @@ describe("decide", () => {
     assert.match(result.reason, /learn\/2026-10-10-/);
   });
 
-  test("allows when a breakdown was written in the same turn", () => {
+  test("allows the stop and tells the user when a breakdown was written", () => {
     const dir = project();
     const result = run(dir, [
       prompt("add retry to payments"),
@@ -58,6 +58,64 @@ describe("decide", () => {
       toolResult(),
       toolUse("Write", { file_path: join(dir, "learn/2026-10-10-add-retry.md"), content: lines(30) }),
       toolResult(),
+    ]);
+    assert.equal(result?.decision, undefined);
+    assert.match(result?.systemMessage, /Edirae Learn/);
+    assert.match(result.systemMessage, /learn\/2026-10-10-add-retry\.md/);
+  });
+
+  test("still tells the user after the hook asked for the breakdown", () => {
+    const dir = project();
+    const result = run(
+      dir,
+      [
+        prompt("add retry"),
+        toolUse("Write", { file_path: join(dir, "src/pay.js"), content: lines(20) }),
+        toolUse("Write", { file_path: join(dir, "learn/2026-10-10-add-retry.md"), content: lines(30) }),
+      ],
+      { stop_hook_active: true }
+    );
+    assert.match(result?.systemMessage, /learn\/2026-10-10-add-retry\.md/);
+  });
+
+  test("the hook's own request in the transcript does not read as 'skip learn'", () => {
+    const dir = project();
+    const first = run(dir, [
+      prompt("add retry"),
+      toolUse("Write", { file_path: join(dir, "src/pay.js"), content: lines(20) }),
+    ]);
+    const result = run(
+      dir,
+      [
+        prompt("add retry"),
+        toolUse("Write", { file_path: join(dir, "src/pay.js"), content: lines(20) }),
+        { type: "user", message: { content: `Stop hook feedback:\n${first.reason}` } },
+        toolUse("Write", { file_path: join(dir, "learn/2026-10-10-add-retry.md"), content: lines(30) }),
+      ],
+      { stop_hook_active: true }
+    );
+    assert.match(result?.systemMessage, /learn\/2026-10-10-add-retry\.md/);
+  });
+
+  test("lists every breakdown written in the turn", () => {
+    const dir = project();
+    const result = run(dir, [
+      prompt("two things"),
+      toolUse("Write", { file_path: join(dir, "learn/2026-10-10-one.md"), content: lines(30) }),
+      toolUse("Write", { file_path: join(dir, "learn/2026-10-10-two.md"), content: lines(30) }),
+      toolUse("Edit", { file_path: join(dir, "learn/2026-10-10-two.md"), old_string: "a", new_string: "b" }),
+    ]);
+    assert.match(result.systemMessage, /2026-10-10-one\.md/);
+    assert.match(result.systemMessage, /2026-10-10-two\.md/);
+    assert.equal(result.systemMessage.match(/two\.md/g).length, 1);
+  });
+
+  test("does not announce breakdowns from an earlier turn", () => {
+    const dir = project();
+    const result = run(dir, [
+      prompt("add retry"),
+      toolUse("Write", { file_path: join(dir, "learn/2026-10-10-add-retry.md"), content: lines(30) }),
+      prompt("thanks, push it"),
     ]);
     assert.equal(result, null);
   });
@@ -243,7 +301,8 @@ describe("decide", () => {
       toolUse("Write", { file_path: join(dir, "src/a.js"), content: lines(40) }),
       toolUse("Write", { file_path: join(dir, "docs/learn/2026-10-10-retry.md"), content: lines(30) }),
     ]);
-    assert.equal(allowed, null);
+    assert.equal(allowed.decision, undefined);
+    assert.match(allowed.systemMessage, /docs\/learn\/2026-10-10-retry\.md/);
   });
 
   test("accepts relative file paths", () => {
@@ -271,6 +330,19 @@ describe("hook process", () => {
     const res = invoke({ transcript_path: transcript, cwd: dir, stop_hook_active: false });
     assert.equal(res.status, 0);
     assert.equal(JSON.parse(res.stdout).decision, "block");
+  });
+
+  test("prints the saved-breakdown notice as JSON on stdout", () => {
+    const dir = project();
+    const transcript = join(dir, "session.jsonl");
+    const entries = [
+      prompt("add retry"),
+      toolUse("Write", { file_path: join(dir, "learn/2026-10-10-retry.md"), content: lines(30) }),
+    ];
+    writeFileSync(transcript, entries.map((e) => JSON.stringify(e)).join("\n"));
+    const res = invoke({ transcript_path: transcript, cwd: dir, stop_hook_active: true });
+    assert.equal(res.status, 0);
+    assert.match(JSON.parse(res.stdout).systemMessage, /learn\/2026-10-10-retry\.md/);
   });
 
   test("prints nothing when there is nothing to do", () => {
