@@ -6,7 +6,11 @@
 #   bash /path/to/edirae-learn/install.sh --all
 #
 # Or straight from GitHub:
+<<<<<<< HEAD
 #   curl -fsSL https://raw.githubusercontent.com/eloquentcoder/edirae-learn/master/install.sh | bash -s -- --all
+=======
+#   curl -fsSL https://raw.githubusercontent.com/YOUR-GITHUB-USER/edirae-learn/master/install.sh | bash -s -- --all
+>>>>>>> 2b17fcd96800fa41b1ae0d3e73e8b8ec9c3867db
 #
 # Options:
 #   --claude          Claude Code, for you everywhere   (~/.claude/skills/edirae-learn)

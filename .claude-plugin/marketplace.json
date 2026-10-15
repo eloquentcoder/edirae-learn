@@ -9,7 +9,7 @@
       "name": "edirae-learn",
       "source": "./",
       "description": "Every time your coding agent writes code, get a 2-minute breakdown of what it built, why, and a few questions to check you understand it.",
-      "version": "0.1.0"
+      "version": "0.2.1"
     }
   ]
 }
