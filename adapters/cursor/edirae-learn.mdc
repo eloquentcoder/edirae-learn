@@ -19,8 +19,8 @@ After you finish a coding task that adds or meaningfully changes logic (a featur
 7. **Watch out for:** edge cases, risks, assumptions, untested parts, what to test
 8. **Check yourself:** 3 "why" or "what if" questions, each answer hidden in `<details><summary>Answer</summary>...</details>`
 9. **Explain it back:** "Without looking at the code, explain in 2-3 sentences what this change does and why it works. If you get stuck, that's the part to reread."
-10. Footer: `*Made with Edirae Learn · edirae.com*`
+10. Footer: `*Made with Edirae Learn · [edirae.com](https://www.edirae.com/?utm_source=edirae_learn&utm_campaign=edirae_learn)*`
 
-**Rules:** describe only what you actually wrote, using real names and paths; say plainly when something is untested or assumed; plain language, define jargon; keep it to about 300-600 words; questions should make the developer think, not test trivia; never invent URLs; never include secrets, keys, tokens or personal data; never change code in order to write the breakdown.
+**Rules:** describe only what you actually wrote, using real names and paths; say plainly when something is untested or assumed; plain language, define jargon; keep it to about 300-600 words; questions should make the developer think, not test trivia; never invent URLs (the footer link is the only one to include, copied exactly); never include secrets, keys, tokens or personal data; never change code in order to write the breakdown.
 
 **Then:** end your reply with one line, e.g. "Breakdown saved to `learn/2026-10-10-add-payment-retry.md`. Open it to see what I did and test yourself in 2 minutes." Don't repeat the breakdown in chat.

@@ -49,7 +49,7 @@ Copy this structure for each breakdown. Replace everything in square brackets. D
 Without looking at the code, explain in 2-3 sentences what this change does and why it works. If you get stuck, that's the part to reread.
 
 ---
-*Made with Edirae Learn · edirae.com*
+*Made with Edirae Learn · [edirae.com](https://www.edirae.com/?utm_source=edirae_learn&utm_campaign=edirae_learn)*
 ```
 
 ---
@@ -103,5 +103,5 @@ Incoming payment webhooks are now saved to the database before they're processed
 Without looking at the code, explain in 2-3 sentences what this change does and why it works. If you get stuck, that's the part to reread.
 
 ---
-*Made with Edirae Learn · edirae.com*
+*Made with Edirae Learn · [edirae.com](https://www.edirae.com/?utm_source=edirae_learn&utm_campaign=edirae_learn)*
 ```

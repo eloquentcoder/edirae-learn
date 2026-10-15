@@ -6,7 +6,7 @@
 #   bash /path/to/edirae-learn/install.sh --all
 #
 # Or straight from GitHub:
-#   curl -fsSL https://raw.githubusercontent.com/YOUR-GITHUB-USER/edirae-learn/main/install.sh | bash -s -- --all
+#   curl -fsSL https://raw.githubusercontent.com/eloquentcoder/edirae-learn/master/install.sh | bash -s -- --all
 #
 # Options:
 #   --claude          Claude Code, for you everywhere   (~/.claude/skills/edirae-learn)
@@ -22,8 +22,8 @@
 
 set -euo pipefail
 
-REPO="${EDIRAE_LEARN_REPO:-YOUR-GITHUB-USER/edirae-learn}"
-BRANCH="${EDIRAE_LEARN_BRANCH:-main}"
+REPO="${EDIRAE_LEARN_REPO:-eloquentcoder/edirae-learn}"
+BRANCH="${EDIRAE_LEARN_BRANCH:-master}"
 START_MARK="<!-- edirae-learn:start -->"
 END_MARK="<!-- edirae-learn:end -->"
 
