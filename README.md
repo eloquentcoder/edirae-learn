@@ -47,7 +47,7 @@ Trivial edits (typos, formatting, version bumps, one-line config) are skipped.
 
 This is the recommended way. Besides the skill, the plugin ships a Stop hook: when Claude is about to finish a turn in which it changed code but didn't save a breakdown, the hook asks it to write one (or to finish normally if the change was trivial). Whenever a breakdown is saved, the hook also shows you a one-line notice with its path, so you always know it is there. A skill on its own only runs when Claude thinks to use it, so without the hook breakdowns get skipped. The hook needs `node` on your PATH; without it, the hook does nothing.
 
-The hook only sees files changed with Claude's edit tools (not shell commands or subagents), ignores docs and edits under 5 lines, and respects "skip learn", "turn off Edirae Learn" and `edirae.config.json`. Its tests run with `node --test tests/learn-stop.test.mjs`.
+The hook only sees files changed with Claude's edit tools (not shell commands or subagents), ignores docs and edits under 5 lines, and respects "skip learn", "turn off Edirae Learn" and `edirae.config.json`. Its tests run with `node --test tests/learn-stop.test.mjs`; the installer's with `node --test tests/install.test.mjs`.
 
 **Option B: copy the skill**
 
@@ -67,7 +67,7 @@ mkdir -p .claude/skills && cp -R edirae-learn/skills/edirae-learn .claude/skills
 From inside your project folder:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/eloquentcoder/edirae-learn/master/install.sh | EDIRAE_LEARN_REPO=eloquentcoder/edirae-learn bash -s -- --all
+curl -fsSL https://raw.githubusercontent.com/eloquentcoder/edirae-learn/master/install.sh | bash -s -- --all
 ```
 
 Or, from a clone:
