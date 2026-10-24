@@ -21,6 +21,7 @@ After a meaningful change, your agent saves something like `learn/2026-10-10-add
 - **In short:** what was done, in plain language
 - **What changed:** each file and what changed there
 - **How it works:** the flow, step by step
+- **Before / After the change** (bug fixes): the old code path replayed like a bug report's reproduction steps up to where it broke, then the same input through the new code, showing where it now takes a different path
 - **Why it's built this way:** the decisions, and what was considered instead
 - **The concept worth knowing:** explained simply first, then precisely
 - **Watch out for:** edge cases, risks, and what to test

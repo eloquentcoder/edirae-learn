@@ -2,6 +2,8 @@
 
 Copy this structure for each breakdown. Replace everything in square brackets. Delete any section that genuinely doesn't apply, but keep "Check yourself" and "Explain it back" every time.
 
+For a **bug fix** (or a refactor that changes behaviour), replace "How it works" with "Before the change" and "After the change". Write them like the reproduction steps in a bug report: both start from the same concrete state and input, so the developer can read them side by side and see exactly where the old code went wrong and where the new code takes a different path.
+
 ---
 
 ```markdown
@@ -20,6 +22,24 @@ Copy this structure for each breakdown. Replace everything in square brackets. D
 1. [First thing that happens when this code runs]
 2. [Next step]
 3. [Next step, through to the result]
+
+<!-- For a bug fix, use these two sections instead of "How it works". -->
+
+## Before the change
+**Starting point:** [the concrete state and input that triggers the bug, e.g. "a logged-in user whose access token expired 2 minutes ago clicks Save"]
+1. [First step the old code took, naming the real function or file]
+2. [Next step]
+3. **Breaks here:** [the exact step where it went wrong, and why]
+
+**Result:** [what the user or system saw: the error message, wrong value, hang, or crash]
+
+## After the change
+**Starting point:** same as above.
+1. [Same first step, if unchanged]
+2. **Now different:** [the step where the new code takes a different path, and what it does instead]
+3. [Next step, through to the end]
+
+**Result:** [the correct outcome, and why the error can no longer happen on this path]
 
 ## Why it's built this way
 - **[Decision]:** [why this approach]. Considered [alternative], but [reason it wasn't used].
@@ -54,7 +74,7 @@ Without looking at the code, explain in 2-3 sentences what this change does and 
 
 ---
 
-## A short example
+## A short example (feature)
 
 ```markdown
 # Retry failed payment webhooks
@@ -104,4 +124,30 @@ Without looking at the code, explain in 2-3 sentences what this change does and 
 
 ---
 *Made with Edirae Learn · [edirae.com](https://www.edirae.com/?utm_source=edirae_learn&utm_campaign=edirae_learn)*
+```
+
+---
+
+## Before and after: a bug-fix example
+
+Only the two sections that replace "How it works" are shown here.
+
+```markdown
+## Before the change
+**Starting point:** a user has the Settings page open for 20 minutes, so their 15-minute access token has expired, then clicks Save.
+1. `saveSettings()` in `src/settings/api.ts` sends `PUT /settings` with the stored access token.
+2. The server rejects the expired token with `401 Unauthorized`.
+3. **Breaks here:** `apiClient` in `src/lib/apiClient.ts` treats every 401 as "logged out" and calls `logout()`. It never tries the refresh token.
+
+**Result:** the user is thrown back to `/login` and their unsaved changes are lost, even though their session was still valid.
+
+## After the change
+**Starting point:** same as above.
+1. `saveSettings()` sends `PUT /settings` with the expired token, as before.
+2. The server replies `401`, as before.
+3. **Now different:** `apiClient` sees the 401 and calls `refreshAccessToken()` first, which swaps the refresh cookie for a new access token.
+4. `apiClient` retries `PUT /settings` once with the new token, and the server accepts it.
+5. Only if the refresh itself fails does `apiClient` call `logout()`.
+
+**Result:** the settings save and the user stays on the page. An expired access token is now treated as "needs refreshing", not "logged out".
 ```
